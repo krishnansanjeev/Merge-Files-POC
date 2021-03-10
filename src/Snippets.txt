@@ -1,0 +1,57 @@
+getPathFilesFromFolder().stream().forEach({
+    file -> convertToPdf(file, generateDestinationPathFile(file))
+    //convertToPdf is a method from your lib
+})
+
+generateDestinationPathFile(File file) {
+    // rename file
+}
+List<Path> getPathFilesFromFolder() throws IOException {
+        return Files.list(Paths.get("D:\\Example"))
+                    .collect(Collectors.toList());
+}
+
+
+===========================================================================================================================
+
+Reading multipart file
+InputStream inputStream =  new BufferedInputStream(file.getInputStream());
+
+
+////   to save the file in temporary location
+public  static File multipartToFile(MultipartFile multipart, String fileName) throws IllegalStateException, IOException {
+    File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+fileName);
+    multipart.transferTo(convFile);
+    return convFile;
+}
+
+=============================================================================================================================
+///////// multipart file to file
+
+
+1. using get bytes
+public void write(MultipartFile file, Path dir) {
+    Path filepath = Paths.get(dir.toString(), file.getOriginalFilename());
+
+    try (OutputStream os = Files.newOutputStream(filepath)) {
+        os.write(file.getBytes());
+    }
+}
+
+
+2. using transfer to
+
+public void multipartFileToFile(
+    MultipartFile multipart, 
+    Path dir
+) throws IOException {
+    Path filepath = Paths.get(dir.toString(), multipart.getOriginalFilename());
+    multipart.transferTo(filepath);
+}
+
+===============================================================================================================================
+
+
+//////// Create Temp Directory with customPrefix
+String customDirPrefix = "logs_";
+Path tmpCustomLocationAndPrefix = Files.createTempDirectory(customBaseDir, customDirPrefix);
